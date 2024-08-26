@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { useFinancialRecords } from "../../contexts/financial-record-context";
 
 export const FinRecordForm = () => {
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+
+  // record related
+  const { addRecord } = useFinancialRecords();
 
   // user details
   const { user } = useUser();
@@ -18,7 +22,7 @@ export const FinRecordForm = () => {
 
     // form details
     const newRecord = {
-      userId: user?.id,
+      userId: user?.id ?? "",// if user.id is undefined put ""
       date: new Date(),
       description: description,
       amount: parseFloat(amount),
@@ -28,7 +32,7 @@ export const FinRecordForm = () => {
     // console.log(newRecord);
 
     // submit
-    //addRecord(newRecord)
+    addRecord(newRecord);
 
     // reset
     setDescription("");
